@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="campo.css">
+    <title>Campo Minado</title>
+</head>
+<body>
+    <!--Quantidade de minas-->
+    <div>
+        <h1>Campo Minado</h1>
+        <hr>
+        <div id="menu">
+            <div>
+                <h2>Dificuldade</h2>
+                <input type="radio" name="dificuldade" id="iniciante" value="0" checked><label for="iniciante">Iniciante</label>
+                <input type="radio" name="dificuldade" id="intermediario" value="1"><label for="intermediario">Intermediário</label>
+                <input type="radio" name="dificuldade" id="experiente" value="2"><label for="experiente">Experiente</label>
+                <input type="radio" name="dificuldade" id="customizado" value="3"><label for="customizado">Customizado</label>
+            </div>
+            <hr>
+            <div>
+                <h2>Configurações</h2>
+                
+                <div style="display: inline-block;">
+                    <h3>Largura</h3>
+
+                    <span id="larguraMinima">9</span>
+                    <input type="range" id="larguraIntervalo" min="9" max="30" step="1">
+                    <span id="larguraMaxima">30</span>
+                    <input type="number" id="larguraTexto">
+                </div>
+
+                <div style="display: inline-block;">
+                    <h3>Altura</h3>
+                    <span id="alturaMinima">9</span>
+                    <input type="range" id="alturaIntervalo" min="9" max="30" step="1">
+                    <span id="alturaMaxima">30</span>
+                    <input type="number" id="alturaTexto">
+                </div>
+
+                <div style="display: inline-block;">
+                    <h3>Bombas</h3>
+
+                    <span id="bombasMinimo">10</span>
+                    <input type="range" id="bombasIntervalo" min="10" max="99" step="1">
+                    <span id="bombasMaximo">99</span>
+                    <input type="number" id="bombasTexto">
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div>
+            <button id="alternaMenu">Exibir Menu</button>
+            <button id="iniciar">Novo Jogo</button>
+        </div>
+    </div>
+    <table id="campo"></table>
+</body>
+<script src="campoMinado.js"></script>
+</html>

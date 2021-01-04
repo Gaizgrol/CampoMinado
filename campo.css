@@ -1,0 +1,81 @@
+#campo
+{
+    border-collapse: collapse;
+}
+
+#campo tr
+{
+    width: 100%;
+}
+
+#campo tr td
+{
+    width: 48px;
+    height: 48px;
+    border: 1px solid #9A9A9A;
+}
+
+#campo tr .aberto
+{
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #d3d3d3;
+}
+
+#campo tr .bandeira
+{
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    background-color: #8080BF;
+}
+
+#campo tr .explosao
+{
+    font-size: 0px;
+    background-color: #f0f080;
+}
+
+#campo tr .explosao-foco
+{
+    font-size: 0px;
+    background-color: #0F0F0F;
+}
+
+#campo tr .fechado
+{
+    font-size: 0px;
+    background-color: #808080;
+}
+
+#campo tr .fechado:hover
+{
+    background-color: #a9a9a9;
+}
+
+#campo tr .mina
+{
+    font-size: 0px;
+    background-color: #f08080;
+}
+
+#campo tr .queimado
+{
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #303030;
+}
+
+#campo tr .solucionado
+{
+    font-size: 0px;
+    background-color: #90ee90;
+}
+
+hr
+{
+    border: 1px solid #dfdfdf;
+}
