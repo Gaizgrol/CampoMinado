@@ -13,6 +13,10 @@
     width: 48px;
     height: 48px;
     border: 1px solid #9A9A9A;
+    
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 #campo tr .aberto
@@ -30,6 +34,7 @@
     font-weight: bold;
     color: white;
     background-color: #8080BF;
+    cursor: pointer;
 }
 
 #campo tr .explosao
@@ -48,6 +53,7 @@
 {
     font-size: 0px;
     background-color: #808080;
+    cursor: pointer;
 }
 
 #campo tr .fechado:hover

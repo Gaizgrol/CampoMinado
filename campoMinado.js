@@ -15,9 +15,16 @@ class Jogo
 
         this.estado = Jogo.JOGANDO;
         
-        /**@type {Bloco[]} */
         this.blocos = [];
         this.blocosFechados = 0;
+
+        this.contadorBombas = document.getElementById("bombas");
+        this.contadorTempo = document.getElementById("tempo");
+
+        this.bandeiras = 0;
+
+        this.tempo = 0;
+        this.temporizador = null;
 
         this.iniciar();
     }
@@ -27,6 +34,20 @@ class Jogo
         // Caso esteja em jogo
         if ( this.estado == Jogo.JOGANDO )
         {
+            if ( this.blocosFechados == this.altura * this.largura )
+            {
+                this.temporizador = setInterval(()=>
+                {
+                    if ( this.estado == Jogo.JOGANDO )
+                    {
+                        this.tempo++;
+                        this.atualizaTempo();
+                    }
+                    else
+                        clearInterval( this.intervalo );
+                }, 1000);
+            }
+
             let bloco = this.buscaBloco( x, y );
             
             // Caso o bloco exista e não tenha sido aberto
@@ -62,6 +83,16 @@ class Jogo
                 }
             }
         }
+    }
+
+    atualizaBombas()
+    {
+        this.contadorBombas.textContent = `Bombas: ${ this.bombas - this.bandeiras }`;
+    }
+
+    atualizaTempo()
+    {
+        this.contadorTempo.textContent = `Tempo: ${ this.tempo }`;
     }
 
     buscaBloco( x, y )
@@ -102,7 +133,7 @@ class Jogo
     criaTabela()
     {
         // Limpa o campo
-        let tabela = document.getElementById("campo");
+        let tabela = document.querySelector("#campo tbody");
         tabela.innerHTML = "";
 
         // Popula o campo
@@ -122,6 +153,12 @@ class Jogo
                     {
                         event.preventDefault();
                         bloco.bandeira();
+                        if ( bloco.temBandeira )
+                            this.bandeiras++;
+                        else
+                            this.bandeiras--;
+                        
+                        this.atualizaBombas();
                     }
                 });
 
@@ -186,6 +223,9 @@ class Jogo
         {
             if ( bloco.temMina )
                 bloco.atualizaEstado( Bloco.SOLUCIONADO );
+
+            this.bandeiras = this.bombas;
+            this.atualizaBombas();
         }
     }
     
@@ -194,11 +234,18 @@ class Jogo
         this.criaTabela();
         this.enterraMinas();
         this.calculaNumeros();
+        this.atualizaBombas();
+        this.atualizaTempo();
     }
 
     perde()
     {
         this.estado = Jogo.DERROTA;
+    }
+
+    termina()
+    {
+        clearInterval( this.temporizador );
     }
 }
 
@@ -320,6 +367,12 @@ class Menu
         CUSTOMIZADO: 3
     };
 
+    static temas =
+    {
+        CLARO: 0,
+        ESCURO: 1
+    };
+
     // Tamanho e bombas predefinidas
     static predefinicoes =
     [
@@ -385,6 +438,12 @@ class Menu
             // Text input
             texto: document.getElementById("alturaTexto")
         },
+        tema:
+        {
+            // Range inputs
+            claro: document.getElementById("claro"),
+            escuro: document.getElementById("escuro")
+        },
         // Começa o jogo
         iniciar: document.getElementById("iniciar"),
         // Alterna visibilidade do menu
@@ -393,7 +452,7 @@ class Menu
 
     // Métodos
 
-    static alteraDificuldade( dificuldade )
+    static alternaDificuldade( dificuldade )
     {
         // Configura a dificuldade
         Menu.dificuldade = dificuldade;
@@ -443,6 +502,26 @@ class Menu
         Menu.elementos.altura.texto.disabled = ativa;
     }
 
+    static alternaTema( tema )
+    {
+        switch ( tema )
+        {
+            // Claro
+            case Menu.temas.ESCURO:
+                document.body.style.color = "#FFFFFF";
+                document.body.style.backgroundColor = "#3F3F3F";
+                Menu.elementos.tema.escuro.checked = true;
+                break;
+                
+            // Tema claro
+            default:
+                document.body.style.color = "#000000";
+                document.body.style.backgroundColor = "#FFFFFF";
+                Menu.elementos.tema.claro.checked = true;
+                break;
+        }
+    }
+
     static alternaVisibilidade()
     {
         Menu.mostrar = !Menu.mostrar;
@@ -456,6 +535,7 @@ class Menu
         Menu.configuraBombas();
         Menu.configuraTamanho();
         Menu.configuraBotoes();
+        Menu.configuraTema();
     }
 
     static configuraBombas()
@@ -509,23 +589,23 @@ class Menu
         let mnDificuldades = Menu.elementos.dificuldades;
 
         // Dificuldade padrão
-        Menu.alteraDificuldade( Menu.dificuldades.INICIANTE );
+        Menu.alternaDificuldade( Menu.dificuldades.INICIANTE );
 
         mnDificuldades.iniciante.addEventListener("click", () =>
         {
-            Menu.alteraDificuldade( Menu.dificuldades.INICIANTE );
+            Menu.alternaDificuldade( Menu.dificuldades.INICIANTE );
         });
         mnDificuldades.intermediario.addEventListener("click", () =>
         {
-            Menu.alteraDificuldade( Menu.dificuldades.INTERMEDIARIO );
+            Menu.alternaDificuldade( Menu.dificuldades.INTERMEDIARIO );
         });
         mnDificuldades.experiente.addEventListener("click", () =>
         {
-            Menu.alteraDificuldade( Menu.dificuldades.EXPERIENTE );
+            Menu.alternaDificuldade( Menu.dificuldades.EXPERIENTE );
         });
         mnDificuldades.customizado.addEventListener("click", () =>
         {
-            Menu.alteraDificuldade( Menu.dificuldades.CUSTOMIZADO );
+            Menu.alternaDificuldade( Menu.dificuldades.CUSTOMIZADO );
         });
     }
 
@@ -577,6 +657,24 @@ class Menu
             else
                 // Valor antigo
                 mnLargura.texto.value = Menu.largura;
+        });
+    }
+
+    static configuraTema()
+    {
+        // Objeto com elementos relacionados ao tema
+        let mnTema = Menu.elementos.tema;
+
+        // Tema padrão
+        Menu.alternaTema( Menu.temas.CLARO );
+
+        mnTema.claro.addEventListener("click", () =>
+        {
+            Menu.alternaTema( Menu.temas.CLARO );
+        });
+        mnTema.escuro.addEventListener("click", () =>
+        {
+            Menu.alternaTema( Menu.temas.ESCURO );
         });
     }
 
@@ -639,6 +737,9 @@ class Menu
         // Se for válida, carrega configurações, caso contrário carrega valores customizados
         let { largura, altura, bombas } = dificuldadeValida ? Menu.predefinicoes[ dificuldade ] : { largura: Menu.largura, altura: Menu.altura, bombas: Menu.bombas };
 
+        if ( Menu.jogo )
+            Menu.jogo.termina();
+            
         Menu.jogo = new Jogo( largura, altura, bombas );
     }
 }
